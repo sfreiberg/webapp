@@ -50,8 +50,9 @@ USAGE:
    your-app [global options] command [command options] [arguments...]
 
 COMMANDS:
-   server, s  Start web server
-   help, h    Shows a list of commands or help for one command
+   server, s    Start web server
+   generate, g  Generators
+   help, h      Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
    --help, -h  show help (default: false)

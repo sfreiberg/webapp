@@ -9,6 +9,19 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+var (
+	// Standard directories
+	staticDir      = "public"
+	controllersDir = "controllers"
+	modelsDir      = "models"
+
+	stdDirs = []string{
+		staticDir,
+		controllersDir,
+		modelsDir,
+	}
+)
+
 type Webapp interface {
 	fiber.Router
 	Run() error
@@ -35,6 +48,7 @@ func New() Webapp {
 		Usage: "Built with github.com/sfreiberg/webapp",
 		Commands: []*cli.Command{
 			serverCmd(app),
+			generateCmd(app),
 		},
 	}
 
