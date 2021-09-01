@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/template/django"
 	"github.com/urfave/cli/v2"
 )
 
@@ -14,11 +15,13 @@ var (
 	staticDir      = "public"
 	controllersDir = "controllers"
 	modelsDir      = "models"
+	viewsDir       = "views"
 
 	stdDirs = []string{
 		staticDir,
 		controllersDir,
 		modelsDir,
+		viewsDir,
 	}
 )
 
@@ -47,7 +50,13 @@ func (w *webapp) Addr() string {
 }
 
 func New() Webapp {
-	app := &webapp{App: fiber.New()}
+	config := fiber.Config{}
+	if _, err := os.Stat(viewsDir); !os.IsNotExist(err) {
+		config.Views = django.New(viewsDir, ".html")
+	}
+	app := &webapp{
+		App: fiber.New(config),
+	}
 	app.cli = &cli.App{
 		Name:  filepath.Base(os.Args[0]),
 		Usage: "Built with github.com/sfreiberg/webapp",
