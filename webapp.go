@@ -57,6 +57,11 @@ func New() Webapp {
 	app := &webapp{
 		App: fiber.New(config),
 	}
+
+	// serve static files if the static directory exists
+	if _, err := os.Stat(staticDir); !os.IsNotExist(err) {
+		app.Static("/", staticDir)
+	}
 	app.cli = &cli.App{
 		Name:  filepath.Base(os.Args[0]),
 		Usage: "Built with github.com/sfreiberg/webapp",
