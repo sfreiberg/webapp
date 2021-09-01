@@ -25,6 +25,7 @@ var (
 type Webapp interface {
 	fiber.Router
 	Run() error
+	AddCommand(*cli.Command)
 }
 
 type webapp struct {
@@ -35,6 +36,10 @@ type webapp struct {
 
 func (w *webapp) Run() error {
 	return w.cli.Run(os.Args)
+}
+
+func (w *webapp) AddCommand(cmd *cli.Command) {
+	w.cli.Commands = append(w.cli.Commands, cmd)
 }
 
 func (w *webapp) Addr() string {
