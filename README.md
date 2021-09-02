@@ -52,6 +52,7 @@ USAGE:
 COMMANDS:
    server, s    Start web server
    generate, g  Generators
+   routes       Display routes
    help, h      Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
