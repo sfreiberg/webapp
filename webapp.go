@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/django"
@@ -49,6 +50,34 @@ func (w *webapp) Addr() string {
 	return fmt.Sprintf(":%v", w.port)
 }
 
+func (w *webapp) sortedRoutes() []*fiber.Route {
+	r := []*fiber.Route{}
+	for i := range w.Stack() {
+		for j := range w.Stack()[i] {
+			r = append(r, w.Stack()[i][j])
+		}
+	}
+	sort.Sort(routes(r))
+	return r
+}
+
+type routes []*fiber.Route
+
+func (r routes) Len() int {
+	return len(r)
+}
+
+func (r routes) Swap(i, j int) {
+	r[i], r[j] = r[j], r[i]
+}
+
+func (r routes) Less(i, j int) bool {
+	if r[i].Path == r[j].Path {
+		return r[i].Method < r[j].Method
+	}
+	return r[i].Path < r[j].Path
+}
+
 func New() Webapp {
 	config := fiber.Config{}
 	if _, err := os.Stat(viewsDir); !os.IsNotExist(err) {
@@ -68,6 +97,7 @@ func New() Webapp {
 		Commands: []*cli.Command{
 			serverCmd(app),
 			generateCmd(app),
+			displayRoutesCmd(app),
 		},
 	}
 

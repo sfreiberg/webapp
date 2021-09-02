@@ -1,7 +1,11 @@
 package webapp
 
 import (
+	"fmt"
 	"os"
+	"reflect"
+	"runtime"
+	"text/tabwriter"
 
 	"github.com/urfave/cli/v2"
 )
@@ -51,6 +55,28 @@ func generateDirectoriesCmd(w *webapp) *cli.Command {
 					}
 				}
 			}
+			return nil
+		},
+	}
+}
+
+func displayRoutesCmd(w *webapp) *cli.Command {
+	return &cli.Command{
+		Name:  "routes",
+		Usage: "Display routes",
+		Action: func(c *cli.Context) error {
+			tw := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
+			out := "%s\t%s\t%s\t\n"
+			fmt.Fprintf(tw, out, "Path", "Method", "Controller")
+			fmt.Fprintf(tw, out, "====", "======", "==========")
+
+			for _, r := range w.sortedRoutes() {
+				for _, handler := range r.Handlers {
+					funcName := runtime.FuncForPC(reflect.ValueOf(handler).Pointer()).Name()
+					fmt.Fprintf(tw, out, r.Path, r.Method, funcName)
+				}
+			}
+			tw.Flush()
 			return nil
 		},
 	}
