@@ -80,3 +80,12 @@ func displayRoutesCmd(w *webapp) *cli.Command {
 		},
 	}
 }
+
+func tasksCmd(w *webapp) *cli.Command {
+	return &cli.Command{
+		Name:        "tasks",
+		Usage:       "Display tasks",
+		Aliases:     []string{"t"},
+		Subcommands: w.tasks.All(),
+	}
+}
