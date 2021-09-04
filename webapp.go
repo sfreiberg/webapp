@@ -42,6 +42,26 @@ type webapp struct {
 	port  int
 }
 
+func New() Webapp {
+	config := fiber.Config{}
+	if _, err := os.Stat(viewsDir); !os.IsNotExist(err) {
+		config.Views = django.New(viewsDir, ".html")
+	}
+	app := &webapp{
+		App: fiber.New(config),
+		tasks: &tasks{
+			tasks: []*cli.Command{},
+		},
+	}
+
+	// serve static files if the static directory exists
+	if _, err := os.Stat(staticDir); !os.IsNotExist(err) {
+		app.Static("/", staticDir)
+	}
+
+	return app
+}
+
 func (w *webapp) Run() error {
 	w.cli = &cli.App{
 		Name:  filepath.Base(os.Args[0]),
@@ -95,24 +115,4 @@ func (r routes) Less(i, j int) bool {
 		return r[i].Method < r[j].Method
 	}
 	return r[i].Path < r[j].Path
-}
-
-func New() Webapp {
-	config := fiber.Config{}
-	if _, err := os.Stat(viewsDir); !os.IsNotExist(err) {
-		config.Views = django.New(viewsDir, ".html")
-	}
-	app := &webapp{
-		App: fiber.New(config),
-		tasks: &tasks{
-			tasks: []*cli.Command{},
-		},
-	}
-
-	// serve static files if the static directory exists
-	if _, err := os.Stat(staticDir); !os.IsNotExist(err) {
-		app.Static("/", staticDir)
-	}
-
-	return app
 }
