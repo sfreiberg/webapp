@@ -31,7 +31,6 @@ var (
 type Webapp interface {
 	fiber.Router
 	Run() error
-	AddCommand(*cli.Command)
 	AddTasks(...*cli.Command)
 }
 
@@ -79,10 +78,6 @@ func (w *webapp) Run() error {
 
 func (w *webapp) AddTasks(task ...*cli.Command) {
 	w.tasks.Add(task...)
-}
-
-func (w *webapp) AddCommand(cmd *cli.Command) {
-	w.cli.Commands = append(w.cli.Commands, cmd)
 }
 
 func (w *webapp) Addr() string {
