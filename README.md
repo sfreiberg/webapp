@@ -50,9 +50,10 @@ USAGE:
    your-app [global options] command [command options] [arguments...]
 
 COMMANDS:
-   server, s    Start web server
    generate, g  Generators
    routes       Display routes
+   server, s    Start web server
+   tasks, t     Display tasks
    help, h      Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
