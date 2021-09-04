@@ -13,15 +13,17 @@ import (
 
 var (
 	// Standard directories
-	staticDir      = "public"
 	controllersDir = "controllers"
 	modelsDir      = "models"
+	tasksDir       = "tasks"
+	staticDir      = "public"
 	viewsDir       = "views"
 
 	stdDirs = []string{
-		staticDir,
 		controllersDir,
 		modelsDir,
+		tasksDir,
+		staticDir,
 		viewsDir,
 	}
 )
@@ -30,16 +32,33 @@ type Webapp interface {
 	fiber.Router
 	Run() error
 	AddCommand(*cli.Command)
+	AddTasks(...*cli.Command)
 }
 
 type webapp struct {
 	*fiber.App
-	cli  *cli.App
-	port int
+	tasks *tasks
+	cli   *cli.App
+	port  int
 }
 
 func (w *webapp) Run() error {
+	w.cli = &cli.App{
+		Name:  filepath.Base(os.Args[0]),
+		Usage: "Built with github.com/sfreiberg/webapp",
+		Commands: []*cli.Command{
+			displayRoutesCmd(w),
+			generateCmd(w),
+			serverCmd(w),
+			tasksCmd(w),
+		},
+	}
+
 	return w.cli.Run(os.Args)
+}
+
+func (w *webapp) AddTasks(task ...*cli.Command) {
+	w.tasks.Add(task...)
 }
 
 func (w *webapp) AddCommand(cmd *cli.Command) {
@@ -85,20 +104,14 @@ func New() Webapp {
 	}
 	app := &webapp{
 		App: fiber.New(config),
+		tasks: &tasks{
+			tasks: []*cli.Command{},
+		},
 	}
 
 	// serve static files if the static directory exists
 	if _, err := os.Stat(staticDir); !os.IsNotExist(err) {
 		app.Static("/", staticDir)
-	}
-	app.cli = &cli.App{
-		Name:  filepath.Base(os.Args[0]),
-		Usage: "Built with github.com/sfreiberg/webapp",
-		Commands: []*cli.Command{
-			serverCmd(app),
-			generateCmd(app),
-			displayRoutesCmd(app),
-		},
 	}
 
 	return app
