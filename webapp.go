@@ -47,8 +47,8 @@ func (w *webapp) Run() error {
 		Name:  filepath.Base(os.Args[0]),
 		Usage: "Built with github.com/sfreiberg/webapp",
 		Commands: []*cli.Command{
-			displayRoutesCmd(w),
 			generateCmd(w),
+			routesCmd(w),
 			serverCmd(w),
 			tasksCmd(w),
 		},

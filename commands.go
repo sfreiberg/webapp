@@ -60,7 +60,7 @@ func generateDirectoriesCmd(w *webapp) *cli.Command {
 	}
 }
 
-func displayRoutesCmd(w *webapp) *cli.Command {
+func routesCmd(w *webapp) *cli.Command {
 	return &cli.Command{
 		Name:  "routes",
 		Usage: "Display routes",
