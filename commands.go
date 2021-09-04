@@ -76,8 +76,7 @@ func displayRoutesCmd(w *webapp) *cli.Command {
 					fmt.Fprintf(tw, out, r.Path, r.Method, funcName)
 				}
 			}
-			tw.Flush()
-			return nil
+			return tw.Flush()
 		},
 	}
 }
