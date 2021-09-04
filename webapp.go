@@ -29,7 +29,26 @@ var (
 )
 
 type Webapp interface {
-	fiber.Router
+	Use(args ...interface{}) fiber.Router
+
+	Get(path string, handlers ...fiber.Handler) fiber.Router
+	Head(path string, handlers ...fiber.Handler) fiber.Router
+	Post(path string, handlers ...fiber.Handler) fiber.Router
+	Put(path string, handlers ...fiber.Handler) fiber.Router
+	Delete(path string, handlers ...fiber.Handler) fiber.Router
+	Connect(path string, handlers ...fiber.Handler) fiber.Router
+	Options(path string, handlers ...fiber.Handler) fiber.Router
+	Trace(path string, handlers ...fiber.Handler) fiber.Router
+	Patch(path string, handlers ...fiber.Handler) fiber.Router
+
+	Add(method, path string, handlers ...fiber.Handler) fiber.Router
+	Static(prefix, root string, config ...fiber.Static) fiber.Router
+	All(path string, handlers ...fiber.Handler) fiber.Router
+
+	Group(prefix string, handlers ...fiber.Handler) fiber.Router
+
+	Mount(prefix string, fiber *fiber.App) fiber.Router
+
 	Run() error
 	AddTasks(...*cli.Command)
 }
