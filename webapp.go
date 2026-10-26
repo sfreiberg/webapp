@@ -7,7 +7,7 @@ import (
 	"sort"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/template/django"
+	"github.com/gofiber/template/django/v3"
 	"github.com/urfave/cli/v2"
 )
 
@@ -29,7 +29,7 @@ var (
 )
 
 type Webapp interface {
-	Use(args ...interface{}) fiber.Router
+	Use(args ...any) fiber.Router
 
 	Get(path string, handlers ...fiber.Handler) fiber.Router
 	Head(path string, handlers ...fiber.Handler) fiber.Router

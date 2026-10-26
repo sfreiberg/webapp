@@ -49,7 +49,7 @@ func generateDirectoriesCmd(w *webapp) *cli.Command {
 		Usage:   "Generate standard directory structure",
 		Action: func(c *cli.Context) error {
 			for _, dir := range stdDirs {
-				if err := os.Mkdir(dir, 0744); err != nil {
+				if err := os.Mkdir(dir, 0o755); err != nil {
 					if !os.IsExist(err) {
 						return err
 					}
