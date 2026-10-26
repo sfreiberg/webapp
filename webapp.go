@@ -29,7 +29,7 @@ var (
 )
 
 type Webapp interface {
-	Use(args ...interface{}) fiber.Router
+	Use(args ...any) fiber.Router
 
 	Get(path string, handlers ...fiber.Handler) fiber.Router
 	Head(path string, handlers ...fiber.Handler) fiber.Router
