@@ -143,6 +143,12 @@ func TestGenerateDirectories(t *testing.T) {
 		if !fi.IsDir() {
 			t.Errorf("%s is not a directory", d)
 		}
+		// A directory that is readable by group/other must also be
+		// searchable (x) by them, whatever the umask is.
+		perm := fi.Mode().Perm()
+		if (perm&0o040 != 0 && perm&0o010 == 0) || (perm&0o004 != 0 && perm&0o001 == 0) {
+			t.Errorf("%s has mode %v: readable but not searchable", d, perm)
+		}
 	}
 }
 
